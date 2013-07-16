@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <style type="text/css">
+      .message-input {
+        width: 500px;
+      }
+
+      .chat-display {
+        min-height: 100px;
+        background: rgb(214, 214, 214);
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>What would I do if i was rich?</h1>
+      <h1>Two new libraries at the same time...</h1>
+      <p>First name: <input data-bind="value: firstName" /></p>
+    <p>Last name: <input data-bind="value: lastName" /></p>
+      <h2>Welcome: <span data-bind="text: fullName"></span>.</h2>
+    </header>
+
+    <section class="main-ui">
+      <div class="chat-display">
+        <!-- stuff from firebase gets rendered here. -->
+      </div>
+      <input type="text" class="message-input" placeholder="Write something here.">
+    </section>
+    <script src='knockout.js'></script>
+    <script>
+      var fireBaseDataRef = new Firebase("chatclient.firebaseio.com");
+
+      var displayChatMessage = function(name, text) {
+        var messageNode = document.createElement("div");
+        messageNode.innerHTML = '<h3>'+name+' says:</h3> <span>'+text+'</span>';
+        document.getElementsByClassName('chat-display')[0].appendChild(messageNode);
+      };
+
+      fireBaseDataRef.on('child_added', function(data) {
+        var message = data.val();
+        if (message.name !== undefined && message.text !== undefined) {
+          displayChatMessage(message.name, message.text);
+        }
+      });
+
+      function AppViewModel() {
+        var that = this;
+        this.firstName = ko.observable("Howard");
+        this.lastName = ko.observable("Tang");
+
+        this.fullName = ko.computed(function() {
+            return this.firstName() + " " + this.lastName();
+        }, this);
+
+        var messageInput = document.getElementsByClassName('message-input')[0];
+        messageInput.addEventListener('keypress', function(event) {
+          if (event.keyCode === 13) {
+          fireBaseDataRef.push({name: that.fullName(), text: messageInput.value});
+            messageInput.value = '';
+          }
+        });
+    }
+
+    ko.applyBindings(new AppViewModel());
+    </script>
+  </body>
+</html>
