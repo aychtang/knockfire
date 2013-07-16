@@ -18,7 +18,7 @@
       <h1>What would I do if i was rich?</h1>
       <h1>Two new libraries at the same time...</h1>
       <p>First name: <input data-bind="value: firstName" /></p>
-    <p>Last name: <input data-bind="value: lastName" /></p>
+      <p>Last name: <input data-bind="value: lastName" /></p>
       <h2>Welcome: <span data-bind="text: fullName"></span>.</h2>
     </header>
 
@@ -57,7 +57,7 @@
         var messageInput = document.getElementsByClassName('message-input')[0];
         messageInput.addEventListener('keypress', function(event) {
           if (event.keyCode === 13) {
-          fireBaseDataRef.push({name: that.fullName(), text: messageInput.value});
+            fireBaseDataRef.push({name: that.fullName(), text: messageInput.value});
             messageInput.value = '';
           }
         });
