@@ -11,7 +11,7 @@ var displayChatMessage = function(name, text) {
     'name': name,
     'text': text
   });
-  
+
   document.getElementsByClassName('chat-display')[0].innerHTML += html;
 };
 
