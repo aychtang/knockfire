@@ -20,6 +20,12 @@
       <input type="text" class="message-input" placeholder="Write something here.">
     </section>
 
+    <!-- Message Template -->
+
+    <script id="message-template" type="text/x-handlebars-template">
+      <div><h3>{{name}}</h3><span>{{text}}</span></div>
+    </script>
+
     <!-- JS -->
     <script src='https://cdn.firebase.com/v0/firebase.js'></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0/handlebars.min.js"></script>
