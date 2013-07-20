@@ -6,11 +6,12 @@ var compileTemplate = function() {
 
 var messageTemplate = compileTemplate();
 
-var displayChatMessage = function(name, text, score) {
+var displayChatMessage = function(name, text, score, refId) {
   var html = messageTemplate({
     'name': name,
     'text': text,
-    'score': score
+    'score': score,
+    'ref-id': refId
   });
 
   var newNode = document.getElementsByClassName('chat-display')[0].innerHTML += html;
@@ -20,8 +21,10 @@ var fireBaseDataRef = new Firebase("chatclient.firebaseio.com");
 
 fireBaseDataRef.on('child_added', function(data) {
   var message = data.val();
+  var refId = data.ref().name();
+
   if (message.name !== undefined && message.text !== undefined) {
-    displayChatMessage(message.name, message.text, message.score);
+    displayChatMessage(message.name, message.text, message.score, refId);
   }
 });
 
@@ -48,7 +51,8 @@ ko.applyBindings(new AppViewModel());
 var setEventListener = function() {
   document.getElementsByClassName('chat-display')[0].addEventListener('click', function(e) {
     if (e.srcElement.className === 'post') {
-      //increment score here.
+      e.srcElement.dataset.score = parseInt(e.srcElement.dataset.score) + 1;
+      fireBaseDataRef.child(e.srcElement.dataset.refId).update({score: e.srcElement.dataset.score});
     }
   });
 };
